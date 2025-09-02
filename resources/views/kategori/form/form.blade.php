@@ -1,14 +1,49 @@
-<div class="form-group mb-2">
-    <label for="kode">Kode</label>
-    <input type="text" name="kode" id="kode" class="form-control"
-           value="{{ old('kode', $kategori->kode ?? '') }}" required>
-</div>
+@extends('layouts.app')
 
-<div class="form-group mb-2">
-    <label for="nama">Nama</label>
-    <input type="text" name="nama" id="nama" class="form-control"
-           value="{{ old('nama', $kategori->nama ?? '') }}" required>
-</div>
+@section('content')
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
 
-<button type="submit" class="btn btn-success mt-2">Simpan</button>
-<a href="{{ url('kategori') }}" class="btn btn-secondary mt-2">Batal</a>
+            <div class="form-group mb-2">
+                <a href="{{ url('kategori') }}" class="btn btn-secondary">Kembali ke Daftar Kategori</a>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    {{ isset($kategori) ? 'Edit Kategori' : 'Buat Kategori Baru' }}
+                </div>
+                <div class="card-body">
+                    <form
+                        action="{{ isset($kategori)
+                            ? route('kategori.submit', ['method' => 'edit', 'id' => $kategori->id])
+                            : route('kategori.submit', ['method' => 'create']) }}"
+                        method="POST">
+                        @csrf
+
+                        <div class="mb-3">
+                            <label for="kode" class="form-label">Kode</label>
+                            <input type="text" name="kode" id="kode" class="form-control"
+                                value="{{ old('kode', $kategori->kode ?? '') }}"
+                                placeholder="Masukkan kode kategori" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="nama" class="form-label">Nama</label>
+                            <input type="text" name="nama" id="nama" class="form-control"
+                                value="{{ old('nama', $kategori->nama ?? '') }}"
+                                placeholder="Masukkan nama kategori" required>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-success">Simpan</button>
+                            <a href="{{ url('kategori') }}" class="btn btn-secondary">Batal</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@endsection

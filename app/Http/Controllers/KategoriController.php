@@ -43,6 +43,36 @@ class KategoriController extends Controller
         return view('kategori.form.form', compact('kategori'));
     }
 
+    public function formView($method, $id = null)
+    {
+    if ($method === 'edit' && $id) {
+        $kategori = Kategori::findOrFail($id);
+        return view('kategori.form', compact('kategori', 'method'));
+    }
+
+    // default untuk create
+    return view('kategori.form.form', ['method' => $method]);
+    }
+
+    public function formSubmit(Request $request, $method, $id = null)
+    {
+        $validated = $request->validate([
+        'nama' => 'required|string|max:255',
+        'kode'=> 'required|string|max:255'
+    ]);
+
+    if ($method === 'edit' && $id) {
+        $kategori = Kategori::findOrFail($id);
+        $kategori->update($validated);
+        return redirect('kategori')->with('success', 'Kategori berhasil diperbarui!');
+    }
+
+    // default create
+    Kategori::create($validated);
+    return redirect('kategori')->with('success', 'Kategori berhasil ditambahkan!');
+    }
+
+
     public function update(Request $request, Kategori $kategori)
     {
         $request->validate([
