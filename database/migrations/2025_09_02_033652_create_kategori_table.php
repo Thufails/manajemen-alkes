@@ -13,18 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('master_items', function (Blueprint $table) {
+        Schema::create('kategori', function (Blueprint $table) {
             $table->id();
             $table->string('kode');
             $table->string('nama');
-            $table->integer('harga_beli');
-            $table->integer('laba');
-            $table->string('supplier');
-            $table->string('jenis');
-            $table->string('foto');
-            $table->unsignedBigInteger('kategori_id')->nullable();
-            $table->timestamps();
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -35,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('master_items');
+        Schema::dropIfExists('kategori');
     }
 };
