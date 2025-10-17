@@ -12,44 +12,44 @@ class MasterItemsController extends Controller
 {
     public function index()
     {
-        return view('master_items.index.index');
+        $items = MasterItem::with('kategori')->orderBy('kategori_id', 'asc')->get();
+        return view('master_items.index.index',compact('items'));
     }
-
     public function search(Request $request)
     {
-        $kode = $request->kode;
-        $nama = $request->nama;
-        $hargamin = $request->hargamin;
-        $hargamax = $request->hargamax;
+            $kode = $request->kode;
+            $nama = $request->nama;
+            $hargamin = $request->hargamin;
+            $hargamax = $request->hargamax;
 
-        $data_search = MasterItem::query();
+            $data_search = MasterItem::query();
 
-        if (!empty($kode)) $data_search = $data_search->where('kode', $kode);
-        if (!empty($nama)) $data_search = $data_search->where('nama', 'LIKE', '%' . $nama . '%');
+            if (!empty($kode)) $data_search = $data_search->where('kode', $kode);
+            if (!empty($nama)) $data_search = $data_search->where('nama', 'LIKE', '%' . $nama . '%');
 
-        //if (!empty($hargamin)) $data_search = $data_search->where('harga_beli', '>=', $hargamin)->where('harga_beli', '<=', $hargamax);
-        if (!empty($hargamin)){
-            $data_search->where('harga_beli', '>=', $hargamin);
+            //if (!empty($hargamin)) $data_search = $data_search->where('harga_beli', '>=', $hargamin)->where('harga_beli', '<=', $hargamax);
+            if (!empty($hargamin)){
+                $data_search->where('harga_beli', '>=', $hargamin);
+                }
+            if (!empty($hargamax)){
+                $data_search->where('harga_beli', '<=', $hargamin);
+                }
+
+            $data_search = $data_search->select('kode', 'nama', 'jenis', 'harga_beli', 'laba', 'supplier', 'kategori_id', 'foto')->orderBy('id')->get();
+
+            $data_search->transform(function ($item) {
+            if (!empty($item->foto) && file_exists(public_path($item->foto))) {
+                $item->foto_url = asset($item->foto);
+            } else {
+                $item->foto_url = asset('images/no-image.png'); // fallback image
             }
-        if (!empty($hargamax)){
-            $data_search->where('harga_beli', '<=', $hargamin);
-            }
+            return $item;
+            });
 
-        $data_search = $data_search->select('kode', 'nama', 'jenis', 'harga_beli', 'laba', 'supplier', 'foto')->orderBy('id')->get();
-
-        $data_search->transform(function ($item) {
-        if (!empty($item->foto) && file_exists(public_path($item->foto))) {
-            $item->foto_url = asset($item->foto);
-        } else {
-            $item->foto_url = asset('images/no-image.png'); // fallback image
-        }
-        return $item;
-        });
-
-        return json_encode([
-            'status' => 200,
-            'data' => $data_search
-        ]);
+            return json_encode([
+                'status' => 200,
+                'data' => $data_search
+            ]);
     }
 
     public function formView($method, $id = 0)
@@ -71,7 +71,9 @@ class MasterItemsController extends Controller
 
     public function singleView($kode)
     {
-        $data['data'] = MasterItem::where('kode', $kode)->first();
+        $data['data'] = MasterItem::with('kategori') // load relasi kategori
+        ->where('kode', $kode)
+        ->firstOrFail();
         return view('master_items.single.index', $data);
     }
 

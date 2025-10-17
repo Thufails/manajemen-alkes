@@ -12,11 +12,11 @@ class MasterItem extends Model
     use SoftDeletes;
 
     protected $fillable = [
-    'nama', 'harga_beli', 'laba', 'kode', 'supplier', 'jenis', 'foto'
+    'nama', 'harga_beli', 'laba', 'kode', 'supplier', 'jenis', 'kategori_id', 'foto'
     ];
 
-    public function masterItems()
+    public function kategori()
     {
-        return $this->belongsToMany(Kategori::class, 'kategori_master_item');
+        return $this->belongsTo(\App\Models\Kategori::class, 'kategori_id', 'id');
     }
 }

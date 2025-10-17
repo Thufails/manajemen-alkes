@@ -5,6 +5,9 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
 
+            <div class="form-group mb-2">
+                <a href="{{url('master-items')}}" class="btn btn-secondary">Kembali ke Daftar Item</a>
+            </div>
             <div class="mb-3 d-flex gap-2">
                 <a href="{{ url('kategori/form/new') }}" class="btn btn-primary">+ Tambah Kategori</a>
             </div>

@@ -19,6 +19,20 @@ class KategoriController extends Controller
         return view('kategori.form.form');
     }
 
+    public function search()
+    {
+        $data = MasterItem::with('kategori')->get();
+
+        return datatables()->of($data)
+            ->addColumn('kategori', function ($row) {
+                return $row->kategori->nama ?? '-';
+            })
+            ->addColumn('action', function ($row) {
+                return '<a href="'.url('master-items/view/'.$row->id).'" class="btn btn-sm btn-info">View</a>';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
     public function store(Request $request)
     {
         $request->validate([
@@ -44,15 +58,18 @@ class KategoriController extends Controller
     }
 
     public function formView($method, $id = null)
-    {
-    if ($method === 'edit' && $id) {
+{
+    if ($method == 'new') {
+        return view('kategori.form.form', ['method' => $method]);
+    } elseif ($method == 'edit') {
         $kategori = Kategori::findOrFail($id);
-        return view('kategori.form', compact('kategori', 'method'));
+        return view('kategori.form.form', ['method' => $method, 'kategori' => $kategori]);
     }
 
-    // default untuk create
-    return view('kategori.form.form', ['method' => $method]);
-    }
+    abort(404);
+}
+
+
 
     public function formSubmit(Request $request, $method, $id = null)
     {

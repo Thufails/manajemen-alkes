@@ -21,6 +21,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/master-items', [App\Http\Controllers\MasterItemsController::class, 'index']);
@@ -34,11 +35,21 @@ Route::get('/master-items/delete/{id}', [App\Http\Controllers\MasterItemsControl
 
 Route::get('/master-items/update-random-data', [App\Http\Controllers\MasterItemsController::class, 'updateRandomData']);
 
-Route::get('/kategori', [KategoriController::class, 'index']);
-Route::get('/kategori/search', [KategoriController::class, 'search']);
-Route::get('/kategori/form/{method}/{id?}', [KategoriController::class, 'formView']);
-Route::post('/kategori/form/{method}/{id?}', [KategoriController::class, 'formSubmit'])->name('kategori.submit');
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/kategori', [KategoriController::class, 'index']);
+    Route::get('/kategori/search', [KategoriController::class, 'search']);
+    Route::get('/kategori/form/{method}/{id?}', [KategoriController::class, 'formView']);
+    Route::post('/kategori/form/{method}/{id?}', [KategoriController::class, 'formSubmit'])->name('kategori.submit');
+    Route::get('/kategori/view/{kode}', [KategoriController::class, 'singleView']);
+    Route::get('/kategori/delete/{id}', [KategoriController::class, 'delete']);
+});
 
-Route::get('/kategori/view/{kode}', [KategoriController::class, 'singleView']);
-Route::get('/kategori/delete/{id}', [KategoriController::class, 'delete']);
+
+// Route::get('/kategori', [KategoriController::class, 'index']);
+// Route::get('/kategori/search', [KategoriController::class, 'search']);
+// Route::get('/kategori/form/{method}/{id?}', [KategoriController::class, 'formView']);
+// Route::post('/kategori/form/{method}/{id?}', [KategoriController::class, 'formSubmit'])->name('kategori.submit');
+
+// Route::get('/kategori/view/{kode}', [KategoriController::class, 'singleView']);
+// Route::get('/kategori/delete/{id}', [KategoriController::class, 'delete']);
 

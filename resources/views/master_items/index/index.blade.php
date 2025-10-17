@@ -4,9 +4,17 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="form-group mb-2">
-                <a href="{{url('master-items/form/new')}}" class="btn btn-secondary">+ Master Items Baru</a>
+            <div class="form-group mb-2 d-flex gap-2">
+                <a href="{{ url('master-items/form/new') }}" class="btn btn-secondary">
+                    + Master Items Baru
+                </a>
+                @if(Auth::user()->role_id === 1)
+                <a href="{{ url('kategori/form/new') }}" class="btn btn-primary">
+                    + Kategori Baru
+                </a>
+                @endif
             </div>
+
             <div class="card">
                 <div class="card-header">Daftar Master Items</div>
 
@@ -19,6 +27,8 @@
     </div>
 </div>
 @endsection
+
 @section('js')
 @include('master_items.index.js')
 @endsection
+

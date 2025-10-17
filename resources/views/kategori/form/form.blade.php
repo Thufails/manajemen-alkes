@@ -5,10 +5,6 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
 
-            <div class="form-group mb-2">
-                <a href="{{ url('kategori') }}" class="btn btn-secondary">Kembali ke Daftar Kategori</a>
-            </div>
-
             <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white">
                     {{ isset($kategori) ? 'Edit Kategori' : 'Buat Kategori Baru' }}

@@ -18,6 +18,6 @@ class Kategori extends Model
 
     public function masterItems()
     {
-        return $this->belongsToMany(MasterItem::class, 'kategori_master_item');
+        return $this->hasMany(\App\Models\MasterItem::class, 'kategori_id', 'id');
     }
 }
